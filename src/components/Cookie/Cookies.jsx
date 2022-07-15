@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Cookie, Open } from "../../assets";
 import styled from "styled-components";
 import axios from "axios";
@@ -10,9 +10,8 @@ const Cookies = () => {
   const [fortune, setFortune] = useState("");
 
   const openHandler = async () => {
-    setIsOpen(true);
-
     try {
+      setIsOpen(true);
       const response = await axios.get(
         "https://fortune-cookie-f6100-default-rtdb.firebaseio.com/fortunes.json"
       );
@@ -30,34 +29,43 @@ const Cookies = () => {
     }
   };
 
-  const delayOpen = () => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  };
+  const getText = useCallback(() => {
+    const randomNumber = randomIndex(fortunes);
+    const fortuneText = fortunes[randomNumber]?.text;
+
+    setFortune(fortuneText);
+  }, [fortunes]);
 
   useEffect(() => {
     if (!isOpen) return;
+
     setFortune("loading...");
 
-    const randomNumber = randomIndex(fortunes);
-    let fortuneText = fortunes[randomNumber]?.text;
+    const timer = setTimeout(() => {
+      getText();
+    }, 500);
 
-    if (fortuneText) {
-      delayOpen().then(() => {
-        setFortune(fortuneText);
-      });
-    }
-  }, [isOpen, fortunes]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isOpen, getText]);
+  console.log(fortune);
 
   const retryHandler = () => {
     setIsOpen(false);
+    setFortune("");
   };
 
   return (
     <Styles.Wrap>
+      {!isOpen && (
+        <>
+          <div>
+            <Cookie onClick={openHandler} />
+          </div>
+          <h3>오늘의 운세를 확인하세요</h3>
+        </>
+      )}
       {isOpen && (
         <>
           <div>
@@ -65,14 +73,6 @@ const Cookies = () => {
           </div>
           <p>{fortune}</p>
           <button onClick={retryHandler}>다시 확인하기</button>
-        </>
-      )}
-      {!isOpen && (
-        <>
-          <div>
-            <Cookie onClick={openHandler} />
-          </div>
-          <h3>오늘의 운세를 확인하세요</h3>
         </>
       )}
     </Styles.Wrap>
@@ -95,8 +95,8 @@ const Styles = {
       margin-top: 40px;
     }
     p {
-      margin-bottom: 40px;
-      max-width: 60%;
+      margin-bottom: 20px;
+      max-width: 80%;
     }
     button {
       background-color: #fff;
