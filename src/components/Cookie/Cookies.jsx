@@ -108,6 +108,13 @@ const Styles = {
         color: #fff;
       }
     }
+    @media screen and (max-width: 640px) {
+      div {
+        svg {
+          width: 90%;
+        }
+      }
+    }
   `,
 };
 
