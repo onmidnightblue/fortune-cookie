@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Cookie, Open } from "../../assets";
 import styled from "styled-components";
 import axios from "axios";
