@@ -6,12 +6,15 @@ import { randomIndex } from "../../utils/Random";
 
 const Cookies = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [fortunes, setFortunes] = useState([]);
-  const [fortune, setFortune] = useState("");
+  const [fortune, setFortune] = useState(null);
 
+  // cookie open
   const openHandler = async () => {
     try {
       setIsOpen(true);
+      setIsLoading(true);
       const response = await axios.get(
         "https://fortune-cookie-f6100-default-rtdb.firebaseio.com/fortunes.json"
       );
@@ -23,37 +26,32 @@ const Cookies = () => {
           text: data[key].text,
         });
       }
-      setFortunes(loadedFortunes);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        setFortunes(loadedFortunes);
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getText = useCallback(() => {
+  // loading
+  useEffect(() => {
+    if (!fortunes.length) return;
+
     const randomNumber = randomIndex(fortunes);
     const fortuneText = fortunes[randomNumber]?.text;
 
     setFortune(fortuneText);
   }, [fortunes]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    setFortune("loading...");
-
-    const timer = setTimeout(() => {
-      getText();
-    }, 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isOpen, getText]);
   console.log(fortune);
 
+  // retry
   const retryHandler = () => {
     setIsOpen(false);
-    setFortune("");
+    setFortune(null);
   };
 
   return (
@@ -71,8 +69,8 @@ const Cookies = () => {
           <div>
             <Open />
           </div>
-          <p>{fortune}</p>
-          <button onClick={retryHandler}>다시 확인하기</button>
+          {isLoading ? <p>loading...</p> : <p>{fortune}</p>}
+          <button onClick={retryHandler}>RETRY</button>
         </>
       )}
     </Styles.Wrap>
