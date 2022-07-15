@@ -58,17 +58,17 @@ const Cookies = () => {
     <Styles.Wrap>
       {!isOpen && (
         <>
-          <div>
+          <Styles.Close>
             <Cookie onClick={openHandler} />
-          </div>
+          </Styles.Close>
           <h3>오늘의 운세를 확인하세요</h3>
         </>
       )}
       {isOpen && (
         <>
-          <div>
+          <Styles.Open>
             <Open />
-          </div>
+          </Styles.Open>
           {isLoading ? <p>loading...</p> : <p>{fortune}</p>}
           <button onClick={retryHandler}>RETRY</button>
         </>
@@ -81,14 +81,11 @@ const Cookies = () => {
 const Styles = {
   Wrap: styled.div`
     width: 100%;
-    height: calc(100vh - 267px);
+    height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    div {
-      cursor: pointer;
-    }
     h3 {
       margin-top: 40px;
     }
@@ -108,12 +105,18 @@ const Styles = {
         color: #fff;
       }
     }
-    @media screen and (max-width: 640px) {
-      div {
-        svg {
-          width: 90%;
-        }
-      }
+  `,
+  Close: styled.div`
+    cursor: pointer;
+    svg {
+      width: 60%;
+    }
+  `,
+  Open: styled.div`
+    cursor: default;
+    margin-bottom: 20px;
+    svg {
+      width: 100%;
     }
   `,
 };
