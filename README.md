@@ -1,7 +1,7 @@
 ## :cookie: fortune-cookie
 
+with react, vercel
+
 :point_right: [LINK](https://fortune-cookie-sable.vercel.app/)
 
-![untitled](https://user-images.githubusercontent.com/92494452/179136084-2baa2a32-9028-4fcb-92d4-eb2dedb15a68.gif)
-
-react, vercel
+![untitled](https://user-images.githubusercontent.com/92494452/179706387-f06af7d8-400e-43bc-a0a4-fbdc0fb65f0a.gif)
