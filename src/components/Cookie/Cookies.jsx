@@ -46,8 +46,6 @@ const Cookies = () => {
     setFortune(fortuneText);
   }, [fortunes]);
 
-  console.log(fortune);
-
   // retry
   const retryHandler = () => {
     setIsOpen(false);
